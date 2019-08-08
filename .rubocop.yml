@@ -1,0 +1,67 @@
+require: rubocop-rails
+
+AllCops:
+  DisplayCopNames: true
+  Exclude:
+    - db/schema.rb
+  TargetRubyVersion: 2.6
+
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/BlockAlignment:
+  EnforcedStyleAlignWith: start_of_line
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Layout/IndentFirstHashElement:
+  EnforcedStyle: consistent
+
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  '{}'
+    '%i': '{}'
+    '%q': '{}'
+    '%Q': '{}'
+    '%r': '{}'
+    '%s': '{}'
+    '%w': '[]'
+    '%W': '[]'
+    '%x': '{}'
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/SymbolArray:
+  Enabled: false
+
+Metrics/BlockLength:
+  CountComments: false
+  Max: 25
+  Exclude:
+    - app/admin/*.rb
+    - db/migrate/*.rb
+  ExcludedMethods:
+    - context
+    - describe
+    - it
+    - shared_examples
+
+Metrics/LineLength:
+  Max: 100
