@@ -1,0 +1,18 @@
+{
+  "name": "ember-rails",
+  "version": "1.0.0",
+  "description": "Ember Rails project",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "install": "cd frontend && yarn install",
+    "test": "cd frontend && yarn test -r dot",
+    "heroku-postbuild": "cd frontend && yarn build --prod --output-path ../public"
+  },
+  "author": "",
+  "license": "ISC"
+}
