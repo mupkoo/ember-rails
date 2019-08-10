@@ -1,0 +1,21 @@
+version: v1.0
+name: Deploy to Heroku
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Deploy
+    task:
+      secrets:
+        - name: ember-rails
+      jobs:
+        - name: Heroku
+          commands:
+            - checkout
+            - gem install dpl
+            - curl https://cli-assets.heroku.com/install.sh | sh
+
+            - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+            - heroku run rake db:migrate --exit-code --app $HEROKU_APP_NAME

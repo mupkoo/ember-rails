@@ -10,6 +10,7 @@
   "scripts": {
     "start": "cd frontend && yarn start",
     "install": "cd frontend && yarn install",
+    "build": "cd frontend && yarn build",
     "test": "cd frontend && yarn test -r dot",
     "heroku-postbuild": "cd frontend && yarn build --prod --output-path ../public"
   },
