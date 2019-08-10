@@ -1,0 +1,56 @@
+version: v1.0
+name: Ember Rails
+
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Setup
+    task:
+      jobs:
+        - name: bundle
+          commands:
+            - checkout
+            - cache restore bundle-$SEMAPHORE_GIT_BRANCH,bundle-master
+            - sem-version ruby 2.6.3
+            - bundle install --deployment -j 4 --path vendor/bundle
+            - cache store bundle-$SEMAPHORE_GIT_BRANCH vendor/bundle
+
+        - name: yarn
+          commands:
+            - checkout
+            - cache restore node-modules-$SEMAPHORE_GIT_BRANCH,node-modules-master
+            - yarn install
+            - cache store node-modules-$SEMAPHORE_GIT_BRANCH frontend/node_modules
+
+  - name: Test
+    task:
+      prologue:
+        commands:
+          - checkout
+
+      jobs:
+        - name: Rails
+          commands:
+            - sem-service start postgres
+            - sem-version ruby 2.6.3
+            - cache restore bundle-$SEMAPHORE_GIT_BRANCH,bundle-master
+            - cp config/database.yml.ci config/database.yml
+            - bundle install --deployment --path vendor/bundle
+            - bundle exec rake db:setup
+            - bundle exec rails test
+
+        - name: Ember
+          commands:
+            - cache restore node-modules-$SEMAPHORE_GIT_BRANCH,node-modules-master
+            - yarn test -r dot
+
+promotions:
+  - name: Deploy to Heroku
+    pipeline_file: deploy-heroku.yml
+    auto_promote_on:
+      - result: passed
+        branch:
+          - master
