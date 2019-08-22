@@ -12,6 +12,8 @@
     "install": "cd frontend && yarn install",
     "build": "cd frontend && yarn build",
     "test": "cd frontend && yarn test -r dot",
+    "lint:hbs": "cd frontend && yarn lint:hbs",
+    "lint:js": "cd frontend && yarn lint:js",
     "heroku-postbuild": "cd frontend && yarn build --prod --output-path ../public"
   },
   "author": "",
