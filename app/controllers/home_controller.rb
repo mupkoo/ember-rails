@@ -7,6 +7,6 @@ class HomeController < ApplicationController
       File.read(path)
     end
 
-    render html: html.html_safe
+    render html: html.html_safe # rubocop:disable Rails/OutputSafety
   end
 end
