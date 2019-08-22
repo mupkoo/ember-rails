@@ -3,7 +3,10 @@ require: rubocop-rails
 AllCops:
   DisplayCopNames: true
   Exclude:
+    - bin/bundle
     - db/schema.rb
+    - frontend/**/*
+    - vendor/**/*
   TargetRubyVersion: 2.6
 
 Layout/AlignParameters:
@@ -64,4 +67,4 @@ Metrics/BlockLength:
     - shared_examples
 
 Metrics/LineLength:
-  Max: 100
+  Enabled: false
