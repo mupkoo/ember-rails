@@ -13,17 +13,17 @@ blocks:
         - name: bundle
           commands:
             - checkout
-            - cache restore bundle-$SEMAPHORE_GIT_BRANCH,bundle-master
+            - cache restore
             - sem-version ruby 2.6.3
             - bundle install --deployment -j 4 --path vendor/bundle
-            - cache store bundle-$SEMAPHORE_GIT_BRANCH vendor/bundle
+            - cache store
 
         - name: yarn
           commands:
             - checkout
-            - cache restore node-modules-$SEMAPHORE_GIT_BRANCH,node-modules-master
+            - cache restore frontend-$SEMAPHORE_GIT_BRANCH-$(checksum frontend/yarn.lock),frontend-master
             - yarn install
-            - cache store node-modules-$SEMAPHORE_GIT_BRANCH frontend/node_modules
+            - cache store frontend-$SEMAPHORE_GIT_BRANCH-$(checksum frontend/yarn.lock) frontend/node_modules
 
   - name: Lint
     task:
@@ -35,25 +35,25 @@ blocks:
         - name: Rubocop
           commands:
             - sem-version ruby 2.6.3
-            - cache restore bundle-$SEMAPHORE_GIT_BRANCH,bundle-master
+            - cache restore
             - bundle check --path vendor/bundle || bundle install --deployment --path vendor/bundle
             - bundle exec rubocop
 
         - name: Brakeman
           commands:
             - sem-version ruby 2.6.3
-            - cache restore bundle-$SEMAPHORE_GIT_BRANCH,bundle-master
+            - cache restore
             - bundle check --path vendor/bundle || bundle install --deployment --path vendor/bundle
             - bundle exec brakeman
 
         - name: ESLint
           commands:
-            - cache restore node-modules-$SEMAPHORE_GIT_BRANCH,node-modules-master
+            - cache restore frontend-$SEMAPHORE_GIT_BRANCH-$(checksum frontend/yarn.lock),frontend-master
             - yarn lint:js
 
         - name: HBS Lint
           commands:
-            - cache restore node-modules-$SEMAPHORE_GIT_BRANCH,node-modules-master
+            - cache restore frontend-$SEMAPHORE_GIT_BRANCH-$(checksum frontend/yarn.lock),frontend-master
             - yarn lint:hbs
 
   - name: Test
@@ -67,7 +67,7 @@ blocks:
           commands:
             - sem-service start postgres
             - sem-version ruby 2.6.3
-            - cache restore bundle-$SEMAPHORE_GIT_BRANCH,bundle-master
+            - cache restore
             - cp config/database.yml.ci config/database.yml
             - bundle check --path vendor/bundle || bundle install --deployment --path vendor/bundle
             - bundle exec rake db:setup
@@ -75,7 +75,7 @@ blocks:
 
         - name: Ember
           commands:
-            - cache restore node-modules-$SEMAPHORE_GIT_BRANCH,node-modules-master
+            - cache restore frontend-$SEMAPHORE_GIT_BRANCH-$(checksum frontend/yarn.lock),frontend-master
             - yarn test -r dot
 
 promotions:
